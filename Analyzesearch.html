@@ -4,6 +4,17 @@
     <title>Analyze Sample</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 </head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+    background-image: url('/w3images/forestbridge.jpg');
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+</style>
 <body>
 
 <script type="text/javascript">
@@ -27,7 +38,7 @@
 
         // Request parameters.
         var params = {
-            "visualFeatures": "Categories,Description,Color",
+            "visualFeatures": "Categories",
             "details": "",
             "language": "en",
         };
@@ -35,6 +46,8 @@
         // Display the image.
         var sourceImageUrl = document.getElementById("inputImage").value;
         document.querySelector("#sourceImage").src = sourceImageUrl;
+
+
 
         // Perform the REST API call.
         $.ajax({
@@ -52,10 +65,14 @@
             data: '{"url": ' + '"' + sourceImageUrl + '"}',
         })
 
+
+
         .done(function(data) {
             // Show formatted JSON on webpage.
-            $("#responseTextArea").val(JSON.stringify(data, null, 2));
+            $("#responseTextArea").val(JSON.stringify(data, null, 2)); //JQuery gets the current value of the first in the set of matched elements with ID responseTextArea
+            $("#category").val(JSON.parse(data[0].Categories.name, null, 2));
         })
+  
 
         .fail(function(jqXHR, textStatus, errorThrown) {
             // Display error message.
@@ -64,10 +81,11 @@
             alert(errorString);
         });
     };
+ 
 </script>
 
 <h1>Analyze image:</h1>
-Enter the URL to an image of a natural or artificial landmark, then click the <strong>Analyze image</strong> button.
+What looks good? 
 <br><br>
 Image to analyze: <input type="text" name="inputImage" id="inputImage" value="" />
 <button onclick="processImage()">Analyze image</button>
@@ -77,6 +95,8 @@ Image to analyze: <input type="text" name="inputImage" id="inputImage" value="" 
         Response:
         <br><br>
         <textarea id="responseTextArea" class="UIInput" style="width:580px; height:400px;"></textarea>
+        <textarea id="category" class="UIInput"></textarea>
+
     </div>
     <div id="imageDiv" style="width:420px; display:table-cell;">
         Source image:
